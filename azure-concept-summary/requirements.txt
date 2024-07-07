@@ -1,8 +1,0 @@
-openai
-langchain
-langchain-openai
-python-dotenv
-
-load_dotenv()
-
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
