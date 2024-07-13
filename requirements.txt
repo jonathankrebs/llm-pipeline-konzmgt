@@ -4,3 +4,5 @@ langchain-openai
 python-dotenv
 pypdf
 langchain_community
+azure-core
+azure-search-documents

@@ -1,6 +1,7 @@
 ### Project Data ###
 ## Local, sensitive project data ##
-concept-summary/input-data/
+concept-summary/given-text/input-data/
+concept-summary/rag/input-data/
 
 ### AzureFunctions ###
 # Azure Functions localsettings file
