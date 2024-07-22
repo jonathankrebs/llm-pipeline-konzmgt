@@ -3,6 +3,8 @@ from dotenv import load_dotenv
 
 from langchain_community.vectorstores.azuresearch import AzureSearch
 from langchain_openai import AzureOpenAIEmbeddings  
+from langchain_community.document_loaders import PyPDFLoader
+from langchain_text_splitters import CharacterTextSplitter
 
 
 load_dotenv(dotenv_path="concept-summary/rag/.env")
@@ -30,16 +32,14 @@ vector_store: AzureSearch = AzureSearch(
     embedding_function=embeddings.embed_query,
 )
 
-# Perform a similarity search
-docs = vector_store.similarity_search(
-    query="Personalsituation Unternehmen",
-    k=3,
-    search_type="similarity",
-)
-print(docs[0].page_content)
-# index_name = os.getenv("AZURE_AI_SEARCH_INDEX_NAME") 
-# retriever = AzureAISearchRetriever(
-#     content_key="content", top_k=1, index_name=index_name
-# )
+input_base_path = "concept-summary/rag/input-data/"
+input_pdf = "A_1-35.pdf"
 
-# retriever.invoke("Personalsituation Unternehmen")
+# Parse pdf input
+full_path = input_base_path + input_pdf
+loader = PyPDFLoader(full_path)
+documents = loader.load()
+text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+docs = text_splitter.split_documents(documents)
+
+vector_store.add_documents(documents=docs)
