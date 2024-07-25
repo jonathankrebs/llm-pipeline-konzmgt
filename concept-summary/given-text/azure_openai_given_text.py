@@ -2,7 +2,6 @@ import os
 from dotenv import load_dotenv
 from langchain_openai.chat_models import AzureChatOpenAI
 from langchain_community.document_loaders import PyPDFLoader
-import certifi
 
 load_dotenv(dotenv_path="concept-summary/given-text/.env")
 
