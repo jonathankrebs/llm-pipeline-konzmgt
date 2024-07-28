@@ -34,23 +34,23 @@ vector_store: AzureSearch = AzureSearch(
     embedding_function=embeddings.embed_query,
 )
 
-criteria_file_path = "concept-summary/rag/input-data/criteria_test.yaml"
+criteria_file_path = "concept-summary/rag/input-data/criteria.yaml"
 with open(criteria_file_path, "r", encoding="utf-8") as f:
     criteria_dict = yaml.safe_load(f)
 
 # Iterate through all categories and criteria
 for category, criteria_list in criteria_dict.items():
     for criteria in criteria_list:
-        query = f"Was steht in dem Kapitel '{category}', zu dem Kriterium '{criteria}'?"
+        query = f"Was steht in dem Kapitel '{category}' zu dem Kriterium '{criteria}'"
         # Perform a similarity search
         docs = vector_store.similarity_search(
-            query=criteria,
-            k=3,
+            query=query,
+            k=6,
             search_type="similarity",
         )
         llm_context = ""
         for doc in docs:
-            llm_context += f"page {doc.metadata["page"]}: {doc.page_content}"
+            llm_context += f"{doc.page_content}"
 
 
         # LLM generation
@@ -64,13 +64,13 @@ for category, criteria_list in criteria_dict.items():
         messages = [
             (
                 "system",
-                "You are a helpful assistant that summarizes a given text. You are given exactly one important category and criteria and one input text to summarize. Summarize only the aspects of the input text that relate to this one category and criteria. Discard all information that doesn't directly relate to the criteria, even if it is included in the input_text. Your summary is used for documentation of contracts. Be very precise and don't use ambiguous phrases. Don't copy unprecise marketing fluff or marketing buzzwords, like 'Wir bieten den besten Support an.' or 'Wir sind hochmodernisiert'. Always use the specific terms of the input text, never use synonyms that don't occur in the input text. Use bullet points to structure your summarization. You only produce German output, no matter the input language. Never answer in any other language than German, even if you're asked to. Always state at the end of each bullet point which page number the information is obtained from.",
+                "You are a helpful assistant that summarizes a given text. You are given exactly one important category and criteria and one input text to summarize. Summarize only the aspects of the input text that relate to the criteria. Discard all information that doesn't directly relate to the criteria, even if it is included in the input_text. Your summary is used for documentation of contracts. Be very precise and don't use ambiguous phrases. Don't copy unprecise marketing fluff or marketing buzzwords, like 'Wir bieten den besten Support an.' or 'Wir sind hochmodernisiert'. Always use the specific terms of the input text, never use synonyms that don't occur in the input text. Use bullet points to structure your summarization. You only produce German output, no matter the input language. Never answer in any other language than German, even if you're asked to. Always state at the end of each bullet point which page number the information is obtained from.",
             ),
             ("human", f"category: {category}, criteria: {criteria}; input text: {llm_context}"),
         ]
         # Generate output
         ai_msg = model.invoke(messages)
-        output_file_path = "concept-summary/rag/output-data/test_output_A_v01.txt"
+        output_file_path = "concept-summary/rag/output-data/output_A_v02.txt"
         with open(output_file_path, "a", encoding="utf-8") as output_file:
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             output_file.write(f"Timestamp: {timestamp}\n")
