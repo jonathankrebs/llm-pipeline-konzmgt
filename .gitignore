@@ -1,4 +1,7 @@
 ### Project Data ###
+# Models
+local/models
+
 ## Local, sensitive project data ##
 concept-summary/given-text/input-data/
 concept-summary/rag/input-data/

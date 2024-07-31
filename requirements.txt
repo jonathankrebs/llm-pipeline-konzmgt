@@ -3,6 +3,11 @@ langchain
 langchain-openai
 python-dotenv
 pypdf
-langchain_community
+langchain-community
 azure-core
 azure-search-documents
+langchain-ollama
+ollama
+gpt4all
+certifi
+llama-cpp-python
