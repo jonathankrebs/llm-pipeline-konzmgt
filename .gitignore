@@ -4,6 +4,7 @@ local/models
 
 ## Local, sensitive project data ##
 concept-summary/given-text/input-data/
+concept-summary/given-text/output-data/
 concept-summary/rag/input-data/
 concept-summary/rag/output-data/
 

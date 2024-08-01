@@ -11,9 +11,9 @@ model = AzureChatOpenAI(
 )
 
 # Input Data
-criteria = "Personelle Ausstattung Netzleitstelle"
+criteria = "Personalsituation Unternehmen"
 input_base_path = "concept-summary/given-text/input-data/"
-input_pdfs = ["B_23-25.pdf"]
+input_pdfs = ["11-12.pdf"]
 all_documents_content = []
 
 # Parse pdf input

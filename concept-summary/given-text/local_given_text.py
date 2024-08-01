@@ -1,9 +1,8 @@
 from dotenv import load_dotenv
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.llms import GPT4All
-import yaml, csv
+import yaml
 from datetime import datetime
-
 
 load_dotenv(dotenv_path="concept-summary/given-text/.env")
 
@@ -49,14 +48,12 @@ for criteria, context_files in criteria_dict.items():
     # Generate output
     ai_msg = model.invoke(messages)
 
-    output_file_path = "concept-summary/given-text/output-data/output_A.csv"
-    with open(output_file_path, mode="a", delimiter=";", newline="", encoding="utf-8") as output_file:
-        writer = csv.writer(output_file)
-
-        # write the header
-        if output_file.tell() == 0:
-            writer.writerow(["timestamp", "criteria", "output"])
-
+    output_file_path = "concept-summary/given-text/output-data/output_A.txt"
+    with open(output_file_path, "a", encoding="utf-8") as output_file:
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        writer.writerow([timestamp, criteria, ai_msg])
-        print(f"The LLM response for criteria '{criteria}' has been written to {output_file_path}")
+        output_file.write(f"Timestamp: {timestamp}\n")
+        output_file.write(f"Criteria: {criteria}\n")
+        output_file.write(f"Output:\n{ai_msg}\n")
+        output_file.write("---------------------------------------------------------------------\n")
+
+    print(f"The LLM response and criteria have been written to {output_file_path}")
