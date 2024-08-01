@@ -31,8 +31,8 @@ for criteria, context_files in criteria_dict.items():
         # Parse pdf input
         full_path = f"{input_base_path}{context_file}.pdf"
         loader = PyPDFLoader(full_path)
-        context_files = loader.load_and_split()
-        document_content = ''.join([page.page_content for page in context_files])
+        pages = loader.load_and_split()
+        document_content = ''.join([page.page_content for page in pages])
         all_documents_content.append(document_content)
     # Merge all retrieved document pages into one string    
     combined_documents_content = ''.join(all_documents_content)
