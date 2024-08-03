@@ -1,13 +1,14 @@
 openai
 langchain
 langchain-openai
+langchain-ollama
 python-dotenv
 pypdf
 langchain-community
 azure-core
 azure-search-documents
-langchain-ollama
 ollama
 gpt4all
 certifi
 llama-cpp-python
+chromadb

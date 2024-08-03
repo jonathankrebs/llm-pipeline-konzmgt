@@ -3,19 +3,8 @@ from dotenv import load_dotenv
 
 from langchain_community.vectorstores.azuresearch import AzureSearch
 from langchain_openai import AzureOpenAIEmbeddings  
-from langchain_community.document_loaders import PyPDFLoader, TextLoader
+from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-
-def split_into_chunks(text, chunk_size=1000, chunk_overlap=200):
-   if chunk_size <= chunk_overlap:
-      raise ValueError("Chunk size must be greater than overlap size")
-   
-   chunks = []
-   for i in range(0, len(text) - chunk_overlap, chunk_size - chunk_overlap):
-      chunks.append(text[i:i + chunk_size])
-   return chunks
-    
-    
 
 load_dotenv(dotenv_path="concept-summary/rag/.env")
 
@@ -43,26 +32,12 @@ vector_store: AzureSearch = AzureSearch(
     embedding_function=embeddings.embed_query,
 )
 
-input_base_path = "concept-summary/rag/input-data/"
-input_pdf = "A_full.pdf"
+input_base_path = "concept-summary/rag/input-data/datteln/innogy/"
+input_pdf = "NBK_innogy_Koop.pdf"
 
 # Parse pdf input
 full_path = input_base_path + input_pdf
 loader = PyPDFLoader(full_path)
-docs = loader.load_and_split()
-document_text = ""
-for doc in docs:
-    document_text += doc.page_content
-
-# Write document text to txt file
-tmp_file_path = "concept-summary/rag/output-data/document_text_tmp.txt"
-with open(tmp_file_path, "w", encoding="utf-8") as output_file:
-    output_file.write(document_text)
-
-# Load txt file in correct format
-txt_loader = TextLoader(tmp_file_path, encoding="utf-8")
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1000)
-txt_docs = txt_loader.load_and_split(text_splitter)
-
-
-vector_store.add_documents(documents=txt_docs)
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=20000, chunk_overlap=200)
+docs = loader.load_and_split(text_splitter)
+vector_store.add_documents(documents=docs)

@@ -34,7 +34,7 @@ vector_store: AzureSearch = AzureSearch(
     embedding_function=embeddings.embed_query,
 )
 
-criteria_file_path = "concept-summary/rag/input-data/test.yaml"
+criteria_file_path = "concept-summary/rag/input-data/datteln/criteria.yaml"
 with open(criteria_file_path, "r", encoding="utf-8") as f:
     criteria_dict = yaml.safe_load(f)
 
@@ -45,8 +45,7 @@ for category, criteria_list in criteria_dict.items():
         # Perform a similarity search
         docs = vector_store.similarity_search(
             query=query,
-            k=6,
-            search_type="similarity",
+            k=6
         )
         llm_context = ""
         for doc in docs:
@@ -70,7 +69,7 @@ for category, criteria_list in criteria_dict.items():
         ]
         # Generate output
         ai_msg = model.invoke(messages)
-        output_file_path = "concept-summary/rag/output-data/test.txt"
+        output_file_path = "concept-summary/rag/output-data/datteln/innogy/azure_v02.pdf"
         with open(output_file_path, "a", encoding="utf-8") as output_file:
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             output_file.write(f"Timestamp: {timestamp}\n")

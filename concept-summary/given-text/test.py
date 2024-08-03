@@ -1,7 +1,7 @@
-from gpt4all import GPT4All
+from langchain_ollama import ChatOllama
 
-model = GPT4All("Meta-Llama-3-8B-Instruct-fp16.gguf", model_path="local/models", device="cuda", n_ctx=8192) # downloads / loads a 4.66GB LLM
+model = ChatOllama(
+    model="llama-3_1-8b-q4",
+)
 
-with model.chat_session():
-    model.generate("You are an expert ruby programmer giving advice", max_tokens=0)
-    print(model.generate("How to write a loop?"))
+print(model.invoke("Who is the president of the united states").content)

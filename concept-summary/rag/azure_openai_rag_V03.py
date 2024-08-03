@@ -34,7 +34,7 @@ vector_store: AzureSearch = AzureSearch(
     embedding_function=embeddings.embed_query,
 )
 
-criteria_file_path = "concept-summary/rag/input-data/criteria.yaml"
+criteria_file_path = "concept-summary/rag/input-data/datteln/criteria.yaml"
 with open(criteria_file_path, "r", encoding="utf-8") as f:
     criteria_dict = yaml.safe_load(f)
 
@@ -70,7 +70,7 @@ for category, criteria_list in criteria_dict.items():
         ]
         # Generate output
         ai_msg = model.invoke(messages)
-        output_file_path = "concept-summary/rag/output-data/output_A_v03.txt"
+        output_file_path = "concept-summary/rag/output-data/datteln/innogy/azure_v03.pdf"
         with open(output_file_path, "a", encoding="utf-8") as output_file:
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             output_file.write(f"Timestamp: {timestamp}\n")

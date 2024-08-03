@@ -7,7 +7,7 @@ from datetime import datetime
 load_dotenv(dotenv_path="concept-summary/given-text/.env")
 
 model_base_path = "local/models/"
-model_name = "Meta-Llama-3-8B-Instruct.Q4_K_M.gguf"
+model_name = "Meta-Llama-3-8B-Instruct.Q8_0.gguf"
 model = GPT4All(
     model_name=model_name, 
     model_path=model_base_path, 
@@ -17,7 +17,7 @@ model = GPT4All(
 
 # Input Data
 criteria = ""
-input_base_path = "concept-summary/given-text/input-data/"
+input_base_path = "concept-summary/given-text/input-data/datteln/eon/"
 
 criteria_file_path = input_base_path + "criteria.yaml"
 with open(criteria_file_path, "r", encoding="utf-8") as f:
@@ -47,7 +47,7 @@ for criteria, context_files in criteria_dict.items():
         model.generate(system_message, max_tokens=0)
         ai_msg = model.generate(prompt, max_tokens=4096)
 
-    output_file_path = "concept-summary/given-text/output-data/"
+    output_file_path = "concept-summary/given-text/output-data/datteln/eon/llama_3_8b-instruct_q8.txt"
     with open(output_file_path, "a", encoding="utf-8") as output_file:
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         output_file.write(f"Timestamp: {timestamp}\n")
