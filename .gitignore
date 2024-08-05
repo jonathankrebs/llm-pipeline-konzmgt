@@ -7,6 +7,8 @@ concept-summary/given-text/input-data/
 concept-summary/given-text/output-data/
 concept-summary/rag/input-data/
 concept-summary/rag/output-data/
+criteria-assignment/input-data/
+criteria-assignment/output-data/
 
 ### AzureFunctions ###
 # Azure Functions localsettings file

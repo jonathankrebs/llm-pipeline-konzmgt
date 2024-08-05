@@ -6,14 +6,14 @@ from langchain_ollama import ChatOllama
 
 load_dotenv(dotenv_path="concept-summary/given-text/.env")
 
-model_name = "llama-3_1-8b-fp16"
+model_name = "llama-3_1-8b-q8"
 model = ChatOllama(
     model=model_name,
 )
 
 # Input Data
 criteria = ""
-input_base_path = "concept-summary/given-text/input-data/datteln/eon/"
+input_base_path = "concept-summary/given-text/input-data/datteln/innogy/"
 
 criteria_file_path = input_base_path + "criteria.yaml"
 with open(criteria_file_path, "r", encoding="utf-8") as f:
@@ -44,7 +44,7 @@ for criteria, context_files in criteria_dict.items():
     # Generate output
     ai_msg = model.invoke(messages)
 
-    output_file_path = "concept-summary/given-text/output-data/datteln/eon/llama-3_1-8b-instruct-fp16.txt"
+    output_file_path = "concept-summary/given-text/output-data/datteln/innogy/llama-3_1-8b-instruct-q8.txt"
     with open(output_file_path, "a", encoding="utf-8") as output_file:
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         output_file.write(f"Timestamp: {timestamp}\n")
