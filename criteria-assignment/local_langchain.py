@@ -1,14 +1,14 @@
 import os
 from dotenv import load_dotenv
 from datetime import datetime
-from langchain_openai.chat_models import AzureChatOpenAI
+from langchain_ollama import ChatOllama
 import yaml
 
 load_dotenv(dotenv_path="criteria-assignment/.env")
 
-model = AzureChatOpenAI(
-    azure_deployment = os.environ.get("AZURE_OPENAI_DEPLOYMENT"),
-    api_version = os.environ.get("AZURE_OPENAI_API_VERSION")
+model_name = "llama-3_1-8b-q8"
+model = ChatOllama(
+    model=model_name,
 )
 
 # Input Data
@@ -21,6 +21,7 @@ with open(criteria_file_path, "r", encoding="utf-8") as criteria_catalog_file:
 input_text_path = input_base_path + "bnNetze/input.yaml"
 with open(input_text_path, "r", encoding="utf-8") as input_file:
     text_items = yaml.safe_load(input_file)
+
 for text_item in text_items:
     # Set the system message and prompt
     messages = [
@@ -41,7 +42,7 @@ for text_item in text_items:
     # Generate output
     ai_msg = model.invoke(messages)
 
-    output_file_path = "criteria-assignment/output-data/bnNetze/gpt4o_new.txt"
+    output_file_path = "criteria-assignment/output-data/bnNetze/llama-3_1-8b-instruct-q8_new.txt"
     with open(output_file_path, "a", encoding="utf-8") as output_file:
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         output_file.write(f"Timestamp: {timestamp}\n")
