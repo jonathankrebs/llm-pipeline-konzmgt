@@ -9,6 +9,8 @@ concept-summary/rag/input-data/
 concept-summary/rag/output-data/
 criteria-assignment/input-data/
 criteria-assignment/output-data/
+duplicate-detection/input-data/
+duplicate-detection/output-data/
 
 ### AzureFunctions ###
 # Azure Functions localsettings file

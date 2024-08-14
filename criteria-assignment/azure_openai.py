@@ -18,7 +18,7 @@ criteria_file_path = input_base_path + "Kriterienkatalog.txt"
 with open(criteria_file_path, "r", encoding="utf-8") as criteria_catalog_file:
     criteria_catalog = criteria_catalog_file.read()
 
-input_text_path = input_base_path + "bnNetze/input.yaml"
+input_text_path = input_base_path + "InfraKom/input.yaml"
 with open(input_text_path, "r", encoding="utf-8") as input_file:
     text_items = yaml.safe_load(input_file)
 for text_item in text_items:
@@ -41,7 +41,7 @@ for text_item in text_items:
     # Generate output
     ai_msg = model.invoke(messages)
 
-    output_file_path = "criteria-assignment/output-data/bnNetze/gpt4o_new.txt"
+    output_file_path = "criteria-assignment/output-data/InfraKom/gpt4o.txt"
     with open(output_file_path, "a", encoding="utf-8") as output_file:
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         output_file.write(f"Timestamp: {timestamp}\n")
