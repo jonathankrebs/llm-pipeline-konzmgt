@@ -11,6 +11,8 @@ criteria-assignment/input-data/
 criteria-assignment/output-data/
 duplicate-detection/input-data/
 duplicate-detection/output-data/
+nbk-comparison/input-data/
+nbk-comparison/output-data/
 
 ### AzureFunctions ###
 # Azure Functions localsettings file

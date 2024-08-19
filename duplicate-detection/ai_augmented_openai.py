@@ -8,6 +8,7 @@ from langchain_community.document_loaders import PyPDFLoader, TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
+from datetime import datetime
 
 load_dotenv(dotenv_path="duplicate-detection/.env")
 
@@ -27,7 +28,7 @@ embeddings: AzureOpenAIEmbeddings = AzureOpenAIEmbeddings(
 )
 
 input_base_path = "duplicate-detection/input-data/"
-input_pdf = "01.pdf"
+input_pdf = "25_pages.pdf"
 
 # Parse pdf input
 full_path = input_base_path + input_pdf
@@ -38,7 +39,8 @@ for doc in docs:
     document_text += doc.page_content
 
 # Write document text to temporary txt file
-tmp_file_path = "duplicate-detection/output-data/document_text_tmp.txt"
+output_base_path = "duplicate-detection/output-data/openai/"
+tmp_file_path = output_base_path + "document_text_tmp.txt"
 with open(tmp_file_path, "w", encoding="utf-8") as output_file:
     output_file.write(document_text)
 
@@ -54,7 +56,7 @@ model = AzureChatOpenAI(
 
 ai_chunks = []
 # Replace chunks with ai-summary
-with open("duplicate-detection/output-data/chunks.txt", "w", encoding="utf-8") as output_file:
+with open(output_base_path + "chunks.txt", "w", encoding="utf-8") as output_file:
     for chunk in chunks:
         # Set the system message and prompt
         messages = [
@@ -67,22 +69,27 @@ with open("duplicate-detection/output-data/chunks.txt", "w", encoding="utf-8") a
         # Generate output
         ai_msg = model.invoke(messages)
         ai_chunks.append(ai_msg.content)
-        output_file.write(ai_msg.content)
+        output_file.write(ai_msg.content + "\n")
         output_file.write("-" * 80 + "\n")
    
 chunk_embeddings = [embeddings.embed_query(chunk) for chunk in ai_chunks]
 
 # Identify similar chunks
 similarity_matrix = cosine_similarity(chunk_embeddings)
-threshold = 0.7
+threshold = 0.75
 duplicates = np.argwhere(similarity_matrix > threshold)
 
-output_file_path = "duplicate-detection/output-data/output_ai_augmented_gpt4o_TEST.txt"
+output_file_path = output_base_path + "output_ai_augmented_gpt4o.txt"
 with open(output_file_path, "w", encoding="utf-8") as f:
+    count = 0
     for i, j in duplicates:
-        if (i < j):
+        if (i < j & (j - i) > 5):
+            count += 1
             f.write(f"Paragraph {i} is similar to Paragraph {j}\n")
             f.write(f"Paragraph {i}: {chunks[i].page_content}\n")
             f.write(f"Paragraph {j}: {chunks[j].page_content}\n")
             f.write(f"Similarity: {similarity_matrix[i, j]}\n")
             f.write("-" * 80 + "\n")
+    f.write(f"Anzahl der gefundenen Ähnlichkeiten: {count}")
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    f.write(f"Timestamp: {timestamp}\n")
